@@ -15,7 +15,7 @@ def todos_list():
         description = request.form.get('description')
         done = request.form.get('done')
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        sql=helpers.begin(title, description, done)
+        helpers.begin(title, description, done)
     todos = helpers.one()#_____ON_TODO
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return render_template("todos.html", form=form, todos=todos, error=error)
@@ -25,24 +25,13 @@ def todos_list():
 def update(id):
     if request.method=='GET':
         #_#_#_#_TODO NAMES
-        todo1= helpers.two(id)
+        todo1= helpers.base_update(id)
         #_#_#________________
         return (render_template("todo.html", todo1=todo1))
 
 
     if request.method =='POST':
-        conn = sqlite3.connect('todos.db')
-        todo= request.form
-        id= todo['id']
-        title=todo['title']
-        description= todo['description']
-        done= todo['done']
-        cursor = conn.cursor()
-        cursor.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE todo_id=?",(id,title,description,done))
-        conn.commit()
-        cursor.close()
-        conn.commit()
-        conn.close()
+        helpers.update(id)
     return render_template("todo.html", id=id)
 
 
