@@ -19,32 +19,17 @@ def todos_list():
     return render_template("todos.html", form=form, todos=todos, error=error)
 
 
-@app.route('/todos', methods=['GET','POST'])
-def update(id):
-    if request.method=='GET':
-        todo1= helpers.update(id)
-        return (render_template("todo.html", todo1=todo1))
-    if request.method =='POST':
-        helpers.update(id)
-    return render_template("todo.html", id=id)
-
-
 @app.route('/todos/<int:id>/', methods=['GET','POST'])
-def change(id):
-    form = TodoForm()
+def update(id):
+    form=TodoForm()
     if request.method=='GET':
-        conn = sqlite3.connect('todos.db')
-        cursor=conn.cursor()
-        todo1=cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
-        todo1= cursor.fetchall()
-        conn.commit()
-        cursor.close()
-        return (render_template("todo_id.html", todo1=todo1,form=form))
-
-
+        todo=helpers.get_by_id(id)
+        return (render_template("todo_id.html", todo=todo, form=form))
     if request.method =='POST':
-        todo1= helpers.update(id)
-    return render_template("todo.html", id=id,form=form)
+        todo=helpers.get_by_id(id)
+        helpers.update(todo)
+    return render_template("todo.html", id=id,form=form,todo=todo)
+
 
 if __name__ == "__main__":
     app.run(debug=True) 
