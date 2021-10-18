@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for
 from forms import TodoForm
 import sqlite3
-
+import helpers
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
 
@@ -14,32 +14,19 @@ def todos_list():
         title = request.form.get('title')
         description = request.form.get('description')
         done = request.form.get('done')
-
-        sql = '''INSERT INTO todos(title, description, done)
-             VALUES(?,?,?)'''
-        conn = sqlite3.connect('todos.db')
-        cur = conn.cursor()
-        cur.execute(sql, (title, description, done))
-        conn.commit()
-        conn.close()
-    conn = sqlite3.connect('todos.db')
-    cur = conn.cursor()
-    todos = cur.execute("SELECT title,description,done FROM todos").fetchall()
-    conn.commit()
-    conn.close()
-
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        sql=helpers.begin(title, description, done)
+    todos = helpers.one()#_____ON_TODO
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     return render_template("todos.html", form=form, todos=todos, error=error)
 
 
 @app.route('/todos', methods=['GET','POST'])
 def update(id):
     if request.method=='GET':
-        conn = sqlite3.connect('todos.db')
-        cursor=conn.cursor()
-        todo1=cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
-        todo1= cursor.fetchall()
-        conn.commit()
-        cursor.close()
+        #_#_#_#_TODO NAMES
+        todo1= helpers.two(id)
+        #_#_#________________
         return (render_template("todo.html", todo1=todo1))
 
 
@@ -89,4 +76,3 @@ def change(id):
 
 if __name__ == "__main__":
     app.run(debug=True) 
-
