@@ -1,7 +1,7 @@
 from flask import Flask, request
 import sqlite3
 
-def begin(title, description, done):
+def Add_new(title, description, done):
     sql = '''INSERT INTO todos(title, description, done)
      VALUES(?,?,?)'''
     conn = sqlite3.connect('todos.db')
@@ -10,22 +10,24 @@ def begin(title, description, done):
     conn.commit()
     conn.close()
 
-def one():
+def print_all():
     conn = sqlite3.connect('todos.db')
     cur = conn.cursor()
-    cur.execute("SELECT title,description,done FROM todos").fetchall()
+    tasks_list = cur.execute("SELECT title,description,done FROM todos").fetchall()
     conn.commit()
     conn.close()
+    return tasks_list
 
 def update(todo):
     with sqlite3.connect("todos.db") as conn:
         cursor = conn.cursor()
         cursor.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE todo_id=?", todo.get("id"), todo.get("title"),  todo.get("description"), todo.get("done"))
         conn.commit()
-"""   def base_update(id):
+
+def base_update(id):
     conn = sqlite3.connect('todos.db')
     cursor=conn.cursor()
-    todo1=cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
-    todo1= cursor.fetchall()
+    cursor.execute("UPDATE todos SET  id=?", (id,))
+    cursor.fetchall()
     conn.commit()
-    cursor.close() """
+    cursor.close() 
