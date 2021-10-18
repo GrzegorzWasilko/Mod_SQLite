@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Details todo</title>
+</head>
+    <body>
+        <h2> Zmień: </h2>
+        <form method="POST" action="/todos/{{ todo_id }}/">
+            {{ form.hidden_tag() }}
+            <table>
+                {% for todo in todo_form %}
+           <input type="hidden" name="id" value={{todo[0]}}" ><br>
+           Title:<br>
+           <input type="text" name="title" value="{{todo[1]}}"><br>
+           Description:<br>
+           <input type="text" name="description" value="{{todo[2]}}"><br>
+           Done:<br>
+           <input type="checkbox" name="done" value="{{todo[3]}}" ><br><br>
+           {% endfor %}
+            </table>
+            <input type="submit" value="Go">
+        </form>
+    </body>
+</html>
