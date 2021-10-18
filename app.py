@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
-
 from forms import TodoForm
 import sqlite3
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
+
 
 @app.route('/todos/', methods=["GET", 'POST'])
 def todos_list():
@@ -45,9 +45,7 @@ def update(id):
 
     if request.method =='POST':
         conn = sqlite3.connect('todos.db')
-        #fetch form data
         todo= request.form
-        #P_ID=productDetails['P_ID']
         id= todo['id']
         title=todo['title']
         description= todo['description']
@@ -61,4 +59,5 @@ def update(id):
     return render_template("todo.html", id=id)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True) 
+

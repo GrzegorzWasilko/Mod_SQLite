@@ -11,6 +11,7 @@ class Todos:
         c = conn.cursor()
         # Create a Table
         c.execute(""" CREATE TABLE todos (
+            id integer PRIMARY KEY, 
             title varchar(255),
             description varchar(255),
             done Boolean
@@ -47,12 +48,9 @@ class Todos:
         sql = '''INSERT INTO todos (title,description,done)
                 VALUES(?,?,?)'''
         c = conn.cursor()
-        c.execute ( "INSERT INTO todos VALUES (?,?,?)" (sql,values) )
+        c.execute ( sql,values )
         conn.commit()
         conn.close()
-
-
-
 
     def delete(id):
         conn = sqlite3.connect( 'todos.db')
