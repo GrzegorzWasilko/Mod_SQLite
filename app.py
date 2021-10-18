@@ -1,81 +1,64 @@
-from flask import Flask, request, render_template, redirect, url_for,jsonify,make_response,abort
-from forms import TodoForm 
-import SQLmodels
+from flask import Flask, request, render_template, redirect, url_for
+
+from forms import TodoForm
+import sqlite3
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
 
-
-krotka=("one","two", None)
-todos = SQLmodels.create_connection('database.db')
-SQLmodels.add_record(krotka)
-SQLmodels.print_all()
-
-
-
-@app.route("/todos/", methods=["GET", "POST"])
+@app.route('/todos/', methods=["GET", 'POST'])
 def todos_list():
     form = TodoForm()
     error = ""
-    if request.method == "POST":
-        if form.validate_on_submit():
-            todos.create(form.data)
-            todos.save_all()
-        return redirect(url_for("todos_list"))
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        done = request.form.get('done')
 
-    return render_template("todos.html", form=form, todos=todos.all(), error=error)
+        sql = '''INSERT INTO todos(title, description, done)
+             VALUES(?,?,?)'''
+        conn = sqlite3.connect('todos.db')
+        cur = conn.cursor()
+        cur.execute(sql, (title, description, done))
+        conn.commit()
+        conn.close()
+    conn = sqlite3.connect('todos.db')
+    cur = conn.cursor()
+    todos = cur.execute("SELECT title,description,done FROM todos").fetchall()
+    conn.commit()
+    conn.close()
+
+    return render_template("todos.html", form=form, todos=todos, error=error)
 
 
-@app.route("/todos/<int:todo_id>/", methods=["GET", "POST"])
-def todo_details(todo_id):
-    todo = todos.get(todo_id - 1)
-    form = TodoForm(data=todo)
+@app.route('/todos/<int:id>/', methods=['GET','POST'])
+def update(id):
+    if request.method=='GET':
+        conn = sqlite3.connect('todos.db')
+        cursor=conn.cursor()
+        todo1=cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
+        todo1= cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        return (render_template("todo.html", todo1=todo1))
 
-    if request.method == "POST":
-        if form.validate_on_submit():
-            todos.update(todo_id - 1, form.data)
-        return redirect(url_for("todos_list"))
-    return render_template("todo.html", form=form, todo_id=todo_id)
-######################################################################################
-###______________________Część bez formularzy______________________________________###
-@app.route("/api/v1/todos/", methods=["GET"])
-def todos_list_api_v1():
-    return jsonify(todos.all())
-###_______________________________________________________
-@app.errorhandler(400)
-def bad_request(error):
-    return make_response(jsonify({'error': 'Bad request', 'status_code': 400}), 400)
-###_________________________________________________
-@app.route("/api/v1/todos/<int:todo_id>", methods=["PUT"])
-def update_todo(todo_id):
-    todo = todos.get(todo_id)
-    if not todo:
-        abort(404)
-    if not request.json:
-        abort(400)
-    data = request.json
-    if any([
-        'title' in data and not isinstance(data.get('title'), str),
-        'description' in data and not isinstance(data.get('description'), str),
-        'done' in data and not isinstance(data.get('done'), bool)
-    ]):
-        abort(400)
-    todo = {
-        'title': data.get('title', todo['title']),
-        'description': data.get('description', todo['description']),
-        'done': data.get('done', todo['done'])
-    }
-    todos.update(todo_id, todo)
-    return jsonify({'todo': todo})
-    ###________________________________________________________
-@app.route("/api/v1/todos/<int:todo_id>", methods=['DELETE'])
-def delete_todo(todo_id):
-    result = todos.delete(todo_id)
-    if not result:
-        abort(404)
-    return jsonify({'result': result})
+
+    if request.method =='POST':
+        conn = sqlite3.connect('todos.db')
+        #fetch form data
+        todo= request.form
+        #P_ID=productDetails['P_ID']
+        id= todo['id']
+        title=todo['title']
+        description= todo['description']
+        done= todo['done']
+        cursor = conn.cursor()
+        cursor.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE todo_id=?",(id,title,description,done))
+        conn.commit()
+        cursor.close()
+        conn.commit()
+        conn.close()
+    return render_template("todo.html", id=id)
 
 if __name__ == "__main__":
-#       create_connection(r"todos.db")
     app.run(debug=True)
-
