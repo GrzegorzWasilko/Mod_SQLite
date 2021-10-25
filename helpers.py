@@ -21,8 +21,8 @@ def print_all():
 def update(id,title, description, done):
     with sqlite3.connect("todos.db") as conn:
         cur = conn.cursor()
-        cur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE tood_id=?",id, title, description, done )
-        #ur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE      id=?",id, title, description, done )
+        cur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE id=?", id, title, description, done )
+        #ur.execute("UPDATE todos<= SET id=?, title=?, description=?, done=? WHERE  todo_id=?",id, title, description, done )
         conn.commit()
         #cur.close()
 
@@ -36,8 +36,8 @@ def delete(id):
 
 def get_by_id(id):
     with sqlite3.connect("todos.db") as conn:
-        cursor=conn.cursor()
-        cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
-        todo= cursor.fetchall()
+        cur=conn.cursor()
+        cur.execute("SELECT * FROM todos WHERE id=?", (id,))
+        todo= cur.fetchone() # c.fetchall() powodowało zwrot listy zmiana na c.fetchone() zwraca tuple 
         conn.commit()
         return todo

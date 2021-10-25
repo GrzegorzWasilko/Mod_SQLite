@@ -22,12 +22,14 @@ def todos_list():
 @app.route('/todo_id/<int:id>/', methods=['GET','POST'])
 def update(id):
     todo=helpers.get_by_id(id)
-    print ("w todo znajduje się {todo}")
-    form=TodoForm( data = todo )# form=TodoForm(data = todo)
-    print(todo[0])
+    print ("w todo znajduje się {todo}")#todo jest tuplą 
+    todo_dict = {"title": todo[1], "description": todo[2], "done": todo[3]}
+    print(dict)
+    form=TodoForm( data = todo_dict )# form=TodoForm(data = todo)
+    print(todo)
     for i in form:
         print(i)
-    print(form('description'))
+    #print(form('description'))
     print("=======>> =======>> wykonało się get")
     if request.method =='POST':
         print("=======>> =======>> wykonało się początek update")
