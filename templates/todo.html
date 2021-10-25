@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Details todo</title>
+    <title>FORM todo</title>
 </head>
-    <body>
-        <h2> Zmień: </h2>
-        <form method="POST" action="/todos/{{ todo_id }}/">
+    <body style="background-color: red" >
+        <h2> Change: </h2>
+        <form method="POST" action="/todos/">
             {{ form.hidden_tag() }}
             <table>
                 {% for todo in todo_form %}
@@ -19,7 +19,7 @@
            <input type="checkbox" name="done" value="{{todo[3]}}" ><br><br>
            {% endfor %}
             </table>
-            <input type="submit" value="Go">
+            <input type="submit" value="Change">
         </form>
     </body>
 </html>

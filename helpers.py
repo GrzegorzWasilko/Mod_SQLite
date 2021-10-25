@@ -1,7 +1,7 @@
 from flask import Flask, request
 import sqlite3
 
-def Add_new(title, description, done):
+def add_new(title, description, done):
     sql = '''INSERT INTO todos(title, description, done)
      VALUES(?,?,?)'''
     conn = sqlite3.connect('todos.db')
@@ -18,26 +18,26 @@ def print_all():
     conn.close()
     return tasks_list
 
-def update(todo):
+def update(id,title, description, done):
     with sqlite3.connect("todos.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE todo_id=?", todo.get("id"), todo.get("title"),  todo.get("description"), todo.get("done"))
+        cur = conn.cursor()
+        cur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE tood_id=?",id, title, description, done )
+        #ur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE      id=?",id, title, description, done )
         conn.commit()
-        cursor.close()
+        #cur.close()
 
 
 def delete(id):
-    conn = sqlite3.connect( 'todos.db')
-    c = conn.cursor()
-    c.execute ( "DELETE from todos WHERE rowid = (?)", id )
-    conn.commit()
-    conn.close()
+    with sqlite3.connect("todos.db") as conn:
+        c = conn.cursor()
+        c.execute ( "DELETE from todos WHERE rowid = (?)", id )
+        conn.commit()
+       
 
 def get_by_id(id):
-        conn = sqlite3.connect('todos.db')
+    with sqlite3.connect("todos.db") as conn:
         cursor=conn.cursor()
         cursor.execute("SELECT * FROM todos WHERE id=?", (id,))
-        todo1= cursor.fetchall()
+        todo= cursor.fetchall()
         conn.commit()
-        cursor.close()
-        return todo1
+        return todo

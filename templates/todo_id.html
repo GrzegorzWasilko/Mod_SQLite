@@ -1,12 +1,12 @@
-S<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Details todo</title>
+    <title>FORM todo_id</title>
 </head>
     <body>
-        <h2> Change: </h2>
-        <form method="POST" action="/todos/{{ todo_id }}/">
+        <h2> Change: /todo_id/int:id /  ak jak w add w todos :</h2>
+        <form method="POST" action="/todo_id/{{id}}/">
             {{ form.hidden_tag() }}
             <table>
                 {% for field in form if field.widget.input_type != 'hidden' %}
@@ -17,6 +17,51 @@ S<!DOCTYPE html>
                 {% endfor %}
             </table>
             <input type="submit" value="Save">
+            <br/>
+            </table>
+            <br>
+            <h2>Change : /todo_id/    </h2>
+            <form method="POST" action="/todo_id/{{id}}"><!-- action ="(url_for("update"))"  pierwotne == <form method="POST" action="/todo_id/"> -->
+                {{ form.hidden_tag() }}
+                {% for todo in form %}
+                {{ field }}
+                Title:<br>
+                {{todo[1]}}"
+                Description:<br>
+                {{todo[2]}}"
+                Done:<br>
+                {{todo[3]}}
+                {% endfor %}
+                 </table>
+                 <input type="submit" value="Change">
+
+                 <br>
+                 <h2>Change : for todo in form  </h2>
+                <table>
+                    {% for todo in form %}
+               <input type="hidden" name="id" value="{{todo[0]}}" ><br>
+               Title:<br>
+               <input type="text" name="title" value="{{todo[1]}}"><br>
+               Description:<br>
+               <input type="text" name="description" value="{{todo[2]}}"><br>
+               Done:<br>
+               <input type="checkbox" name="done" value="{{todo[3]}}" ><br><br>
+               {% endfor %}
+                </table>
+                <input type="submit" value="Change">
+                
         </form>
     </body>
 </html>
+<!--  <h2> Change: /todo_id/int:id /</h2>
+        <form method="POST" action="/todo_id/{{id}}/">
+            {{ form.hidden_tag() }}
+            <table>
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                    <tr>
+                        <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                        <td>{{ field }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Save"> -->

@@ -14,22 +14,31 @@ def todos_list():
         title = request.form.get('title')
         description = request.form.get('description')
         done = request.form.get('done')
-        helpers.Add_new(title, description, done)
+        helpers.add_new(title, description, done)
     todos = helpers.print_all()
     return render_template("todos.html", form=form, todos=todos, error=error)
 
 
-@app.route('/todos/<int:id>/', methods=['GET','POST'])
+@app.route('/todo_id/<int:id>/', methods=['GET','POST'])
 def update(id):
-    form=TodoForm()
-    if request.method=='GET':
-        todo=helpers.get_by_id(id)
-        return (render_template("todo_id.html", todo=todo, form=form))
+    todo=helpers.get_by_id(id)
+    print ("w todo znajduje się {todo}")
+    form=TodoForm( data = todo )# form=TodoForm(data = todo)
+    print(todo[0])
+    for i in form:
+        print(i)
+    print(form('description'))
+    print("=======>> =======>> wykonało się get")
     if request.method =='POST':
-        todo=helpers.get_by_id(id)
-        helpers.update(todo)
-    return render_template("todo.html", id=id,form=form,todo=todo)
-
+        print("=======>> =======>> wykonało się początek update")
+        id = request.form.get('id')
+        title = request.form.get('title')
+        description = request.form.get('description')
+        done = request.form.get('done')
+        helpers.update(id,title, description, done)
+        print(' <<====<<<====<<====<<<==== został wywołany POOST UPDATE zwracam  form ')
+        return redirect ( url_for('todos_list')) #return render_template("todos.html",form=form,todo=todo)
+    return (render_template("todo_id.html", id=id, form=form, todo=todo))
 
 if __name__ == "__main__":
     app.run(debug=True) 
