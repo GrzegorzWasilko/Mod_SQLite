@@ -22,25 +22,24 @@ def todos_list():
 @app.route('/todo_id/<int:id>/', methods=['GET','POST'])
 def update(id):
     todo=helpers.get_by_id(id)
-    print ("w todo znajduje się {todo}")#todo jest tuplą 
+    #print ("w todo znajduje się {todo}")#todo jest tuplą 
     todo_dict = {"title": todo[1], "description": todo[2], "done": todo[3]}
-    #print(dict)
-    form=TodoForm( data = todo_dict )# form=TodoForm(data = todo)
-    print(todo)
-    for i in form:
-        print(i)
-    print("=======>> =======>> =======>> wykonało się get")
+    form=TodoForm( data = todo_dict )
+    #print(todo)
+    #for i in form:
+    #    print(i)
+    #print("=======>> =======>> =======>> wykonało się get")
     if request.method =='POST':
         print("=======>> =======>> =======>>wykonało się początek update")
-        id = request.form.get('id')
+        #id = request.form.get('id')
         title = request.form.get('title')
         description = request.form.get('description')
         done = request.form.get('done')
-        print(' <<====<<<====<<==== do helpers leci :')
-        print(id ,title ,description )
-        print(' <<====<<<====<<====<<<==== ')
+        #print(' <<====<<<====<<==== do helpers leci :')
+        #print(id ,title ,description )
+        #print(' <<====<<<====<<====<<<==== ')
         helpers.update(id,title, description, done)
-        print(' <<====<<<====<<====<<<==== został wywołany POOST i def UPDATE zwracam  form ')
+        #print(' <<====<<<====<<====<<<==== został wywołany POOST i def UPDATE zwracam  form ')
         return redirect ( url_for('todos_list')) #return render_template("todos.html",form=form,todo=todo)
     return (render_template("todo_id.html", id=id, form=form, todo=todo))
 

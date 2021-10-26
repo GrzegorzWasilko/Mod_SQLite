@@ -21,7 +21,7 @@ def print_all():
 def update(id,title, description, done):
     with sqlite3.connect("todos.db") as conn:
         cur = conn.cursor()
-        cur.execute("UPDATE todos SET id=?, title=?, description=?, done=? WHERE id=?", (id, title, description, done, id))
+        cur.execute("UPDATE todos SET title=?, description=?, done=? WHERE id=?", (title, description, done, id))
         #cur.execute("UPDATE todo SET id=?, title=?, description=?, done=? WHERE id=?", id, title, description, done )
         #ur.execute("UPDATE todos<= SET id=?, title=?, description=?, done=? WHERE  todo_id=?",id, title, description, done )
         cur.close()
