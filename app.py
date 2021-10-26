@@ -24,21 +24,24 @@ def update(id):
     todo=helpers.get_by_id(id)
     print ("w todo znajduje się {todo}")#todo jest tuplą 
     todo_dict = {"title": todo[1], "description": todo[2], "done": todo[3]}
-    print(dict)
+    #print(dict)
     form=TodoForm( data = todo_dict )# form=TodoForm(data = todo)
     print(todo)
     for i in form:
         print(i)
     #print(form('description'))
-    print("=======>> =======>> wykonało się get")
+    print("=======>> =======>> =======>> wykonało się get")
     if request.method =='POST':
-        print("=======>> =======>> wykonało się początek update")
+        print("=======>> =======>> =======>>wykonało się początek update")
         id = request.form.get('id')
         title = request.form.get('title')
         description = request.form.get('description')
         done = request.form.get('done')
+        print(' <<====<<<====<<==== do helpers leci :')
+        print(id ,title ,description )
+        print(' <<====<<<====<<====<<<==== ')
         helpers.update(id,title, description, done)
-        print(' <<====<<<====<<====<<<==== został wywołany POOST UPDATE zwracam  form ')
+        print(' <<====<<<====<<====<<<==== został wywołany POOST i def UPDATE zwracam  form ')
         return redirect ( url_for('todos_list')) #return render_template("todos.html",form=form,todo=todo)
     return (render_template("todo_id.html", id=id, form=form, todo=todo))
 
