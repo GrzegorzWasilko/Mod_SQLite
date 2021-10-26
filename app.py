@@ -29,7 +29,6 @@ def update(id):
     print(todo)
     for i in form:
         print(i)
-    #print(form('description'))
     print("=======>> =======>> =======>> wykonało się get")
     if request.method =='POST':
         print("=======>> =======>> =======>>wykonało się początek update")
